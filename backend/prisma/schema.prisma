@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  AGENT
+  CUSTOMER
+}
+
+enum PolicyStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+
+  policies  Policy[]
+  claims    Claim[]
+}
+
+model Policy {
+  id          Int          @id @default(autoincrement())
+  policyName  String
+  premium     Float
+  startDate   DateTime
+  endDate     DateTime
+  status      PolicyStatus @default(ACTIVE)
+
+  customer    User         @relation(fields: [customerId], references: [id])
+  customerId  Int
+
+  claims      Claim[]
+  createdAt   DateTime     @default(now())
+}
+
+model Claim {
+  id          Int         @id @default(autoincrement())
+  description String
+  status      ClaimStatus @default(PENDING)
+  documentUrl String?
+
+  policy      Policy      @relation(fields: [policyId], references: [id])
+  policyId    Int
+
+  customer    User        @relation(fields: [customerId], references: [id])
+  customerId  Int
+
+  createdAt   DateTime    @default(now())
+}
