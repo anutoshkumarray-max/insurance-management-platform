@@ -24,6 +24,12 @@ enum ClaimStatus {
   REJECTED
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   name      String
@@ -48,6 +54,7 @@ model Policy {
   customerId  Int
 
   claims      Claim[]
+  payments    Payment[]
   createdAt   DateTime     @default(now())
 }
 
@@ -64,4 +71,17 @@ model Claim {
   customerId  Int
 
   createdAt   DateTime    @default(now())
+}
+
+model Payment {
+  id          Int           @id @default(autoincrement())
+  amount      Float
+  dueDate     DateTime
+  paidDate    DateTime?
+  status      PaymentStatus @default(PENDING)
+
+  policy      Policy        @relation(fields: [policyId], references: [id])
+  policyId    Int
+
+  createdAt   DateTime      @default(now())
 }
