@@ -6,6 +6,7 @@ const policyRoutes = require("./routes/policyRoutes");
 const claimRoutes = require("./routes/claimRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const documentRoutes = require("./routes/documentRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.use("/api/policies", policyRoutes);
 app.use("/api/claims", claimRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/documents", documentRoutes);
+app.use("/api/reports", reportRoutes);
 
 module.exports = app;
